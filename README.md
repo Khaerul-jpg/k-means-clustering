@@ -1,1 +1,1 @@
-"# k-means-clustering"
+SEMANGAT YA SKRIPSINYA HEHEHEHEHEH 
