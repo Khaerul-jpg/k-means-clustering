@@ -112,7 +112,7 @@
             <span class="nav-link-text ms-1">K-Means</span>
           </a>
         </li>
-        <li class="nav-item" id="signoutbtn">
+        <!-- <li class="nav-item" id="signoutbtn">
           <a class="nav-link  " href="#">
             <div
               class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -143,7 +143,7 @@
             </div>
             <span class="nav-link-text ms-1">Sign Out</span>
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
   </aside>
@@ -185,6 +185,36 @@
               </div>
 
               <div class="mb-3" id="totalInfo" style="display: none;">
+                <p>Original Data:</p>
+                <p>Total Records: <span id="previousTotalRecords">0</span></p>
+                <p>Total Columns: <span id="previousTotalColumns">0</span></p>
+              </div>
+              <div class="table-responsive p-0 mb-4">
+                <table class="table align-items-center mb-0">
+                  </thead>
+                  <tbody id="originalDataBody">
+                    <!-- Original data will be populated here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="mb-3" id="filterInfo" style="display: none;">
+                <p>Filtering:</p>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Condition</th>
+                      <th>Filter</th>
+                    </tr>
+                  </thead>
+                  <tbody id="filterInfoBody">
+                    <!-- Filter conditions will be populated here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="mb-3" id="totalInfo2" style="display: none;">
+                <p>Processed Data (after dropping columns and filtering):</p>
                 <p>Total Records: <span id="totalRecords">0</span></p>
                 <p>Total Columns: <span id="totalColumns">0</span></p>
               </div>
@@ -194,10 +224,7 @@
                     <!-- Table headers will be dynamically generated here -->
                   </thead>
                   <tbody id="tableBody">
-
-                    <!-- Table body will be populated here -->
-                  </tbody>
-                  <tbody id="excelData">
+                    <!-- Processed data will be populated here -->
                   </tbody>
                 </table>
               </div>
@@ -268,23 +295,50 @@
             const row = data['rows'];
             const totalColumns = columns.length;
 
+            const previousColumns = data['previous_columns'];
+            const previousDataset = data['previous_dataset'];
+            const previousTotalRecords = data['previous_length'];
+            const previousTotalColumns = previousColumns.length;
+
             document.getElementById('totalRecords').textContent = row;
             document.getElementById('totalColumns').textContent = totalColumns;
+            document.getElementById('previousTotalRecords').textContent = previousTotalRecords;
+            document.getElementById('previousTotalColumns').textContent = previousTotalColumns;
 
-            const tableHeaders = columns.map(key => {
-              return `<th>${key}</th>`;
-            }).join('');
+            const tableHeaders = columns.map(key => `<th>${key}</th>`).join('');
             document.getElementById('tableHeaders').innerHTML = tableHeaders;
 
-            let tableBody = []
-            for (let i = 0; i < labels.length; i++) {
-              tableBody.push(`<tr><td>${labels[i]}</td>${dataset[i].map(each => `<td>${each}</td>`).join('')}</tr>`)
-            }
+            const tableBody = dataset.map((row, i) => {
+              return `<tr><td>${labels[i]}</td>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
+            }).join('');
+            document.getElementById('tableBody').innerHTML = tableBody;
 
-            document.getElementById('tableBody').innerHTML = tableBody.join('');
+            const originalHeaders = previousColumns.map(key => `<th>${key}</th>`).join('');
+            const originalDataBody = previousDataset.map(row => {
+              return `<tr>${previousColumns.map(col => `<td>${row[col] || ''}</td>`).join('')}</tr>`;
+            }).join('');
+
+            document.getElementById('originalDataBody').innerHTML = originalHeaders + originalDataBody;
 
             document.getElementById('totalInfo').style.display = 'block';
+            document.getElementById('totalInfo2').style.display = 'block';
             document.getElementById('button-save').style.display = 'block';
+
+            const filterConditions = [
+              { name: 'Umur', condition: 'Greater than 50' },
+              { name: 'Ijazah_tertinggi', condition: 'Less than 4' },
+              { name: 'Jenis_cacat', condition: 'Greater than 0' },
+              { name: 'Status_pekerjaan', condition: 'Greater than 0' },
+              { name: 'Penyakit_kronis', condition: 'Greater than 0' },
+              { name: 'Lapangan_usaha', condition: 'Greater than 0' }
+            ];
+
+            const filterInfoBody = filterConditions.map(condition => {
+              return `<tr><td>${condition.name}</td><td>${condition.condition}</td></tr>`;
+            }).join('');
+
+            document.getElementById('filterInfoBody').innerHTML = filterInfoBody;
+            document.getElementById('filterInfo').style.display = 'block';
           })
       } else {
         alert('Please select a file.');

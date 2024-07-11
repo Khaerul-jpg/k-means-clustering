@@ -1,1 +1,1 @@
-"# k-means-clustering"
+SIAP SIDANG SKRIPSI HEHEHEH

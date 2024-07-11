@@ -236,7 +236,7 @@
                                 <span class="nav-link-text ms-1">Clustering</span>
                             </a>
                         </li>
-                        <li class="nav-item" id="signoutbtn">
+                        <!-- <li class="nav-item" id="signoutbtn">
                             <a class="nav-link  " href="#">
                                 <div
                                     class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -268,7 +268,7 @@
                                 </div>
                                 <span class="nav-link-text ms-1">Sign Out</span>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -285,7 +285,7 @@
                         </li>
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">K-Means</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">K-Means Elbow Method</h6>
+                    <h6 class="font-weight-bolder mb-0">K-Means Clustering</h6>
                 </nav>
             </div>
         </nav>
@@ -362,7 +362,7 @@
             html += `<div class="text-center mt-5"><h5>Clusters</h5></div>`;
             html += '<div class="table-responsive p-0 mb-4">';
             html += '<table class="table align-items-center mb-0">';
-            html += '<thead><tr><th>Desa</th><th>Nama</th><th>Cluster</th></tr></thead><tbody>';
+            html += '<thead><tr><th>Kelurahan</th><th>Nama</th><th>Cluster</th></tr></thead><tbody>';
             clusters.forEach(([desa, nama, cluster]) => {
                 html += `<tr><td>${desa}</td><td>${nama}</td><td>${cluster}</td></tr>`;
             });

@@ -204,9 +204,31 @@ def upload_file():
     file = request.files['file']
     rd = pd.read_excel(file)
 
-   # Convert all columns except the first one to numerical values, filling non-numeric with NaN and then replacing NaN with 0
+    # Clean column names by stripping whitespace and replacing multiple spaces with a single space
+    rd.columns = rd.columns.str.strip().str.replace(r'\s+', ' ', regex=True)
+
+    # update this
+    prev_column = rd.columns.tolist()
+    prev_dataset = rd.head().to_dict(orient='records')
+    prev_len = len(rd)
+
+    # Keep only the specified columns
+    rd = rd[['KDDESA', 'Nama', 'Umur', 'Ijazah_tertinggi', 'Jenis_cacat',
+             'Status_pekerjaan', 'Jumlah_jamkerja', 'Lapangan_usaha', 'Penyakit_kronis']]
+
+    # Convert all columns except the first one to numerical values, filling non-numeric with NaN and then replacing NaN with 0
     rd.iloc[:, 2:] = rd.iloc[:, 2:].apply(
         pd.to_numeric, errors='coerce').fillna(0)
+
+    # Apply the filters
+    rd = rd[
+        (rd['Umur'] > 50) &
+        (rd['Ijazah_tertinggi'] < 4) &
+        (rd['Jenis_cacat'] > 0) &
+        (rd['Status_pekerjaan'] > 0) &
+        (rd['Penyakit_kronis'] > 0) &
+        (rd['Lapangan_usaha'] > 0)
+    ]
 
     dataset = rd.iloc[:, 2:].values
     dataset_labels = rd.iloc[:, 1].values
@@ -216,7 +238,15 @@ def upload_file():
 
     kmeans = KMeans(dataset, 4, dataset_labels)
 
-    return jsonify({"dataset": dataset.tolist()[:5], "labels": dataset_labels.tolist()[1:5], "columns": columns.to_list()[1:], "rows": rows}), 200
+    return jsonify({
+        "previous_columns": prev_column,
+        "previous_dataset": prev_dataset,
+        "previous_length": prev_len,
+        "dataset": dataset.tolist()[:5],
+        "labels": dataset_labels.tolist()[:5],
+        "columns": columns.to_list()[1:],
+        "rows": rows
+    }), 200
 
 
 @app.route('/cluster', methods=['POST'])
