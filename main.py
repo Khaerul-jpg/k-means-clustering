@@ -242,8 +242,8 @@ def upload_file():
         "previous_columns": prev_column,
         "previous_dataset": prev_dataset,
         "previous_length": prev_len,
-        "dataset": dataset.tolist()[:5],
-        "labels": dataset_labels.tolist()[:5],
+        "dataset": dataset.tolist()[:14],
+        "labels": dataset_labels.tolist()[:14],
         "columns": columns.to_list()[1:],
         "rows": rows
     }), 200

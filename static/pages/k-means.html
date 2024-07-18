@@ -112,7 +112,7 @@
             <span class="nav-link-text ms-1">K-Means</span>
           </a>
         </li>
-        <!-- <li class="nav-item" id="signoutbtn">
+         <!-- <li class="nav-item" id="signoutbtn">
           <a class="nav-link  " href="#">
             <div
               class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -169,7 +169,6 @@
             <div class="card-header pb-0">
               <h6>Upload Dataset</h6>
             </div>
-
             <div class="card-body ">
               <form id="uploadForm" enctype="multipart/form-data">
                 <div class="mb-3">
@@ -185,7 +184,7 @@
               </div>
 
               <div class="mb-3" id="totalInfo" style="display: none;">
-                <p>Original Data:</p>
+                <p>Original Data: </p>
                 <p>Total Records: <span id="previousTotalRecords">0</span></p>
                 <p>Total Columns: <span id="previousTotalColumns">0</span></p>
               </div>
@@ -283,7 +282,7 @@
         })
           .then(response => {
             if (!response.ok) {
-              alert('File upload failed: ', response.status);
+              alert('Upload file excel dengan format xlxs ', response.status);
             }
             return response.json()
           })
