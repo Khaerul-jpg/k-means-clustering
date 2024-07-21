@@ -43,6 +43,10 @@
       padding-left: 20px;
       /* Add padding for indentation */
     }
+
+    .text-left {
+      text-align: left;
+    }
   </style>
 </head>
 
@@ -112,7 +116,33 @@
             <span class="nav-link-text ms-1">K-Means</span>
           </a>
         </li>
-         <!-- <li class="nav-item" id="signoutbtn">
+        <li class="nav-item">
+          <a class="nav-link" href="../pages/history_list.html">
+            <div
+              class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+              <svg width="12px" height="12px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <title>document</title>
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g transform="translate(-1870.000000, -591.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <g transform="translate(1716.000000, 291.000000)">
+                      <g transform="translate(154.000000, 300.000000)">
+                        <path class="color-background opacity-6"
+                          d="M40,40 L36.3636364,40 L36.3636364,3.63636364 L5.45454545,3.63636364 L5.45454545,0 L38.1818182,0 C39.1854545,0 40,0.814545455 40,1.81818182 L40,40 Z">
+                        </path>
+                        <path class="color-background"
+                          d="M30.9090909,7.27272727 L1.81818182,7.27272727 C0.814545455,7.27272727 0,8.08727273 0,9.09090909 L0,41.8181818 C0,42.8218182 0.814545455,43.6363636 1.81818182,43.6363636 L30.9090909,43.6363636 C31.9127273,43.6363636 32.7272727,42.8218182 32.7272727,41.8181818 L32.7272727,9.09090909 C32.7272727,8.08727273 31.9127273,7.27272727 30.9090909,7.27272727 Z M18.1818182,34.5454545 L7.27272727,34.5454545 L7.27272727,30.9090909 L18.1818182,30.9090909 L18.1818182,34.5454545 Z M25.4545455,27.2727273 L7.27272727,27.2727273 L7.27272727,23.6363636 L25.4545455,23.6363636 L25.4545455,27.2727273 Z M25.4545455,20 L7.27272727,20 L7.27272727,16.3636364 L25.4545455,16.3636364 L25.4545455,20 Z">
+                        </path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <span class="nav-link-text ms-1">History</span>
+          </a>
+        </li>
+        <!-- <li class="nav-item" id="signoutbtn">
           <a class="nav-link  " href="#">
             <div
               class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -166,6 +196,10 @@
       <div class="row">
         <div class="col-12">
           <div class="card mb-4">
+            <div class="card-header pb-0 d-flex align-items-center">
+              <h6>Nama Kota : </h6>
+              <p id="kotaUpload" class="ms-2 mb-0 px-2 py-1  text-white rounded"></p>
+            </div>
             <div class="card-header pb-0">
               <h6>Upload Dataset</h6>
             </div>
@@ -193,6 +227,81 @@
                   </thead>
                   <tbody id="originalDataBody">
                     <!-- Original data will be populated here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- update here -->
+              <div id="legenda" class="table-responsive p-0 mb-4" style="display: none;">
+                <p>Legenda:</p>
+                <table class="table align-items-center  mb-0">
+                  </thead>
+                  <tbody id="legendaBody">
+                    <tr>
+                      <td>Atribut</td>
+                      <td>Transformasi Data</td>
+                    </tr>
+                    <tr>
+                      <td>Jenis cacat</td>
+                      <td style="text-align: left;">
+                        00. Tidak cacat<br>
+                        01. Tuna daksa/ cacat tubuh<br>
+                        02. Tuna netra/buta<br>
+                        03. Tuna rungu<br>
+                        04. Tuna wicara<br>
+                        05. Tuna rungu & wicara<br>
+                        06. Tuna netra & cacat tubuh<br>
+                        07. Tuna netra, rungu, & wicara<br>
+                        08. Tuna rungu, wicara, & cacat tubuh<br>
+                        09. Tuna rungu, wicara, netra, & cacat tubuh<br>
+                        10. Cacat mental retardas<br>
+                        11. Mantan penderita gangguan jiwa<br>
+                        12. Cacat fisik & mental<br>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Penyakit kronis/menahun</td>
+                      <td style="text-align: left; padding: 0;">
+                        00. Tidak Ada<br>
+                        01. Hipertensi (tekanan darah tinggi)<br>
+                        02. Rematik<br>
+                        03. Asma<br>
+                        04. Masalah jantung<br>
+                        05. Diabetes (kencing manis)<br>
+                        06. Tuberculosis (TBC)<br>
+                        07. Stroke<br>
+                        08. Kanker atau tumor ganas<br>
+                        09. Lainnya (gagal ginjal, paru-paru flek, dan sejenisnya)<br>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Status pekerjaan</td>
+                      <td style="text-align: left; padding: 0;">
+                        00. Berusaha sendiri<br>
+                        01. Berusaha dibantu buruh tidak tetap/tidak dibayar<br>
+                        02. Berusaha dibantu buruh tetap/ dibayar<br>
+                        03. Buruh/karyawan/pegawai swasta<br>
+                        04. PNS/TNI/Polri/BUMN/BUMD/ anggota legislatif<br>
+                        05. Pekerja bebas pertanian<br>
+                        06. Pekerja bebas non-pertanian<br>
+                        07. Pekerja keluarga/tidak dibayar<br>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Ijazah tertinggi</td>
+                      <td style="text-align: left; padding: 0;">
+                        00. SD/SDLB<br>
+                        01. Paket A<br>
+                        02. M. Ibtidaiyah<br>
+                        03. SMP/SMPLB<br>
+                        04. Paket B<br>
+                        05. M. Tsanawiyah<br>
+                        06. SMA/SMK/SMALB<br>
+                        07. Paket C<br>
+                        08. M. Aliyah<br>
+                        09. Perguruan tinggi<br>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -250,6 +359,29 @@
   <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script>
+    document.getElementById('fileInput').addEventListener('change', function () {
+      const fileName = this.files[0] ? this.files[0].name : '';
+      var kota = ''
+      if (fileName.includes('JakBar')) {
+        kota = 'Jakarta Barat'
+      } else if (fileName.includes('JakPus')) {
+        kota = 'Jakarta Pusat'
+      } else if (fileName.includes('JakSel')) {
+        kota = 'Jakarta Selatan'
+      } else if (fileName.includes('JakTim')) {
+        kota = 'Jakarta Timur'
+      } else if (fileName.includes('JakUt')) {
+        kota = 'Jakarta Utara'
+      } else if (fileName.includes('KepRi')) {
+        kota = 'Kepulauan Seribu'
+      }
+
+
+      document.getElementById('kotaUpload').textContent = kota;
+      document.getElementById('kotaUpload').classList.add('bg-primary');
+
+    });
+
     document.addEventListener("DOMContentLoaded", function () {
       // Get the sign-out button element
       const signOutButton = document.getElementById('signoutbtn');
@@ -270,6 +402,7 @@
 
     function uploadFile() {
       const fileInput = document.getElementById('fileInput');
+
       const file = fileInput.files[0];
 
       if (file) {
@@ -338,6 +471,8 @@
 
             document.getElementById('filterInfoBody').innerHTML = filterInfoBody;
             document.getElementById('filterInfo').style.display = 'block';
+            document.getElementById('legenda').style.display = 'block';
+
           })
       } else {
         alert('Please select a file.');
