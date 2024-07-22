@@ -264,6 +264,7 @@ def upload_file():
     ]
 
     dataset = rd.iloc[:, 2:].values
+    rd.iloc[:, 1] = rd.iloc[:, 1].str.strip()
     dataset_labels = rd.iloc[:, 1].values
     label_desa = rd.iloc[:, 0].values
     columns = rd.columns
@@ -271,15 +272,23 @@ def upload_file():
 
     kmeans = KMeans(dataset, 4, dataset_labels)
 
-    for l, v in zip(dataset_labels.tolist()[:14], dataset.tolist()[:14]):
+    dtn = []
+    lbn = []
+    counter = 0
+    for l, v in zip(dataset_labels.tolist(), dataset.tolist()):
+        if counter < 14:
+            lbn.append(l)
+            dtn.append(v)
+            counter += 1
+
         dictionary_db[l] = v
 
     return jsonify({
         "previous_columns": prev_column,
         "previous_dataset": prev_dataset,
         "previous_length": prev_len,
-        "dataset": dataset.tolist()[:14],
-        "labels": dataset_labels.tolist()[:14],
+        "dataset": dtn,
+        "labels": lbn,
         "columns": columns.to_list()[1:],
         "rows": rows
     }), 200
@@ -310,6 +319,7 @@ def kmeans_process():
 
     a = []
     b = []
+
     for result in kmeans.results:
         each = result.to_dict()
         cl = each['clusters']
@@ -318,6 +328,9 @@ def kmeans_process():
         for ecl in cl:
             name = ecl[0]
             # looking up to dict
+            if name not in dictionary_db:
+                continue
+
             dict_db = dictionary_db[name]
             temp.append(ecl + dict_db)
 
@@ -356,7 +369,7 @@ def kmeans_process():
         return jsonify({'result': a})
     except Exception as e:
         db.session.rollback()
-        return jsonify({'message': 'failed insert'}), 409
+        return jsonify({'message': e}), 409
 
     # return jsonify({'result': [result.to_dict() for result in kmeans.results]})
 
