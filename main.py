@@ -1,13 +1,42 @@
+import string
+import random
+from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request
 from flask_cors import CORS
 from flask import Flask, request, send_from_directory, render_template, jsonify
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import matplotlib
+from datetime import datetime
 matplotlib.use('SVG')
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:secretrootpassword@localhost/kmeans'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 CORS(app)
+db = SQLAlchemy(app)
+
+
+class KmeansHistory(db.Model):
+    __tablename__ = 'kmeans_history'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    file_name = db.Column(db.String(255), nullable=False)
+    kota = db.Column(db.String(255), unique=True, nullable=False)
+    clustering_date = db.Column(db.Date)
+    index = db.Column(db.String(255), unique=True, nullable=False)
+    nama = db.Column(db.String(255), unique=True, nullable=False)
+    cluster = db.Column(db.String(255), unique=True, nullable=False)
+    umur = db.Column(db.String(255), unique=True, nullable=False)
+    ijazah_tertinggi = db.Column(db.String(255), unique=True, nullable=False)
+    jenis_cacat = db.Column(db.String(255), unique=True, nullable=False)
+    status_pekerjaan = db.Column(db.String(255), unique=True, nullable=False)
+    jumlah_jam_kerja = db.Column(db.String(255), unique=True, nullable=False)
+    lapangan_usaha = db.Column(db.String(255), unique=True, nullable=False)
+    penyakit_kronis = db.Column(db.String(255), unique=True, nullable=False)
+
 
 dataset = []
 dataset_labels = []
@@ -17,6 +46,8 @@ rows = None
 cluster = None
 max_iteration = None
 kmeans = None
+dictionary_db = {}
+uploadedFileName = ''
 
 
 @app.route('/')
@@ -199,10 +230,12 @@ class KMeans():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    global dataset, dataset_labels, columns, rows, kmeans, label_desa
+    global dataset, dataset_labels, columns, rows, kmeans, label_desa, dictionary_db, uploadedFileName
 
     file = request.files['file']
     rd = pd.read_excel(file)
+
+    uploadedFileName = file.filename
 
     # Clean column names by stripping whitespace and replacing multiple spaces with a single space
     rd.columns = rd.columns.str.strip().str.replace(r'\s+', ' ', regex=True)
@@ -238,6 +271,9 @@ def upload_file():
 
     kmeans = KMeans(dataset, 4, dataset_labels)
 
+    for l, v in zip(dataset_labels.tolist()[:14], dataset.tolist()[:14]):
+        dictionary_db[l] = v
+
     return jsonify({
         "previous_columns": prev_column,
         "previous_dataset": prev_dataset,
@@ -265,14 +301,125 @@ def cluster_config():
 
 @app.route('/k-means', methods=['GET'])
 def kmeans_process():
-    global kmeans, dataset, dataset_labels, cluster
+    global kmeans, dataset, dataset_labels, cluster, dictionary_db, uploadedFileName
     if len(dataset) == 0:
         return jsonify({'message': 'Please upload your dataset first'}), 400
 
     kmeans = KMeans(dataset, cluster, dataset_labels)
     kmeans.lloyds(max_iteration, 42)
 
-    return jsonify({'result': [result.to_dict() for result in kmeans.results]})
+    a = []
+    b = []
+    for result in kmeans.results:
+        each = result.to_dict()
+        cl = each['clusters']
+
+        temp = []
+        for ecl in cl:
+            name = ecl[0]
+            # looking up to dict
+            dict_db = dictionary_db[name]
+            temp.append(ecl + dict_db)
+
+        b.append(temp)
+        a.append(each)
+
+    for i in range(len(a)):
+        a[i]['clusters'] = b[i]
+
+    # save last result to db
+    current_date = datetime.now()
+    namaKota = ''
+    if 'JakBar' in uploadedFileName:
+        namaKota = 'Jakarta Barat'
+    elif 'JakPus' in uploadedFileName:
+        namaKota = 'Jakarta Pusat'
+    elif 'JakSel' in uploadedFileName:
+        namaKota = 'Jakarta Selatan'
+    elif 'JakTim' in uploadedFileName:
+        namaKota = 'Jakarta Timur'
+    elif 'JakUt' in uploadedFileName:
+        namaKota = 'Jakarta Utara'
+    elif 'KepRi' in uploadedFileName:
+        namaKota = 'Kepulauan Seribu'
+
+    try:
+        random_string = ''.join(random.choices(string.digits, k=6))
+
+        for i in a[2]['clusters']:
+            history = KmeansHistory(
+                file_name=uploadedFileName, kota=namaKota, clustering_date=current_date, index=random_string, nama=i[0], cluster=i[1], umur=i[2], ijazah_tertinggi=i[3], jenis_cacat=i[4], status_pekerjaan=i[5], jumlah_jam_kerja=i[6], lapangan_usaha=i[7], penyakit_kronis=i[8],)
+            db.session.add(history)
+
+        db.session.commit()
+
+        return jsonify({'result': a})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'failed insert'}), 409
+
+    # return jsonify({'result': [result.to_dict() for result in kmeans.results]})
+
+
+@app.route('/history', methods=['GET'])
+def get_history():
+    try:
+        distinct_indexes = db.session.query(
+            KmeansHistory.index).distinct().all()
+        distinct_indexes = [index[0] for index in distinct_indexes]
+
+        results = []
+        for x in distinct_indexes:
+            history_records = KmeansHistory.query.filter_by(
+                index=x).first()
+            results.append({
+                'id': history_records.id,
+                'file_name': history_records.file_name,
+                'kota': history_records.kota,
+                'clustering_date': history_records.clustering_date,
+                'index': history_records.index,
+            })
+
+        # Return distinct indexes and filtered records
+        return jsonify({
+            'distinct_indexes': distinct_indexes,
+            'records': results
+        }), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/history-detail', methods=['GET'])
+def get_history_detail():
+    id = request.args.get('id')
+
+    try:
+        results = []
+        history_records = KmeansHistory.query.filter_by(
+            index=id).all()
+        for x in history_records:
+            results.append({
+                'id': x.id,
+                'file_name': x.file_name,
+                'kota': x.kota,
+                'clustering_date': x.clustering_date,
+                'index': x.index,
+                'nama': x.nama,
+                'cluster': x.cluster,
+                'umur': x.umur,
+                'ijazah_tertinggi': x.ijazah_tertinggi,
+                'jenis_cacat': x.jenis_cacat,
+                'status_pekerjaan': x.status_pekerjaan,
+                'jumlah_jam_kerja': x.jumlah_jam_kerja,
+                'lapangan_usaha': x.lapangan_usaha,
+                'penyakit_kronis': x.penyakit_kronis
+            })
+
+        return jsonify({
+            'records': results
+        }), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/elbow', methods=['POST'])

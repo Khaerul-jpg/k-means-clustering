@@ -28,7 +28,35 @@
         /* * {
             border: 1px solid black;
         } */
+        .pagination {
+            justify-content: center;
+            /* Center the pagination bar */
+        }
 
+        .page-item.active .page-link {
+            background-color: #cb0c9f;
+            /* Bootstrap primary color */
+            border-color: #cb0c9f;
+            color: white;
+            /* Border color to match primary background */
+        }
+
+        .card-body li .active {
+            color: white;
+        }
+
+        .card-body li a {
+            border-color: #cb0c9f !important;
+        }
+
+        .page-item {
+            margin-right: 10px;
+        }
+
+        .page-link {
+            border-radius: .25rem;
+            /* Ensure consistent rounding */
+        }
 
         .table td,
         .table th {
@@ -56,12 +84,6 @@
             filter: invert(17%) sepia(66%) saturate(4382%) hue-rotate(300deg) brightness(98%) contrast(108%);
             /* Apply color filter */
         }
-
-        /* #elbowImageContainer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        } */
     </style>
 
 </head>
@@ -110,7 +132,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  active" href="../pages/k-means.html">
+                            <a class="nav-link " href="../pages/k-means.html">
                                 <div
                                     class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                                     <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -135,109 +157,9 @@
                                 </div>
                                 <span class="nav-link-text ms-1">K-Means Dataset</span>
                             </a>
-                            <a class="nav-link ms-5 " href="../pages/cluster-determination.html">
-                                <div
-                                    class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <title>office</title>
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF"
-                                                fill-rule="nonzero">
-                                                <g transform="translate(1716.000000, 291.000000)">
-                                                    <g id="office" transform="translate(153.000000, 2.000000)">
-                                                        <path class="color-background opacity-6"
-                                                            d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z">
-                                                        </path>
-                                                        <path class="color-background"
-                                                            d="M40.25,14 L24.5,14 C23.53225,14 22.75,14.78225 22.75,15.75 L22.75,38.5 L19.25,38.5 L19.25,22.75 C19.25,21.78225 18.46775,21 17.5,21 L1.75,21 C0.78225,21 0,21.78225 0,22.75 L0,40.25 C0,41.21775 0.78225,42 1.75,42 L40.25,42 C41.21775,42 42,41.21775 42,40.25 L42,15.75 C42,14.78225 41.21775,14 40.25,14 Z M12.25,36.75 L7,36.75 L7,33.25 L12.25,33.25 L12.25,36.75 Z M12.25,29.75 L7,29.75 L7,26.25 L12.25,26.25 L12.25,29.75 Z M35,36.75 L29.75,36.75 L29.75,33.25 L35,33.25 L35,36.75 Z M35,29.75 L29.75,29.75 L29.75,26.25 L35,26.25 L35,29.75 Z M35,22.75 L29.75,22.75 L29.75,19.25 L35,19.25 L35,22.75 Z">
-                                                        </path>
-                                                    </g>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                </div>
-                                <span class="nav-link-text ms-1">Cluster Config</span>
-                            </a>
-                            <a class="nav-link px-5 " href="../pages/process.html">
-                                <div
-                                    class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <title>office</title>
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF"
-                                                fill-rule="nonzero">
-                                                <g transform="translate(1716.000000, 291.000000)">
-                                                    <g id="office" transform="translate(153.000000, 2.000000)">
-                                                        <path class="color-background opacity-6"
-                                                            d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z">
-                                                        </path>
-                                                        <path class="color-background"
-                                                            d="M40.25,14 L24.5,14 C23.53225,14 22.75,14.78225 22.75,15.75 L22.75,38.5 L19.25,38.5 L19.25,22.75 C19.25,21.78225 18.46775,21 17.5,21 L1.75,21 C0.78225,21 0,21.78225 0,22.75 L0,40.25 C0,41.21775 0.78225,42 1.75,42 L40.25,42 C41.21775,42 42,41.21775 42,40.25 L42,15.75 C42,14.78225 41.21775,14 40.25,14 Z M12.25,36.75 L7,36.75 L7,33.25 L12.25,33.25 L12.25,36.75 Z M12.25,29.75 L7,29.75 L7,26.25 L12.25,26.25 L12.25,29.75 Z M35,36.75 L29.75,36.75 L29.75,33.25 L35,33.25 L35,36.75 Z M35,29.75 L29.75,29.75 L29.75,26.25 L35,26.25 L35,29.75 Z M35,22.75 L29.75,22.75 L29.75,19.25 L35,19.25 L35,22.75 Z">
-                                                        </path>
-                                                    </g>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                </div>
-                                <span class="nav-link-text ms-1">Process</span>
-                            </a>
-                            <a class="nav-link px-5 active-child " href="../pages/elbow.html">
-                                <div
-                                    class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <title>office</title>
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF"
-                                                fill-rule="nonzero">
-                                                <g transform="translate(1716.000000, 291.000000)">
-                                                    <g id="office" transform="translate(153.000000, 2.000000)">
-                                                        <path class="color-background opacity-6"
-                                                            d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z">
-                                                        </path>
-                                                        <path class="color-background"
-                                                            d="M40.25,14 L24.5,14 C23.53225,14 22.75,14.78225 22.75,15.75 L22.75,38.5 L19.25,38.5 L19.25,22.75 C19.25,21.78225 18.46775,21 17.5,21 L1.75,21 C0.78225,21 0,21.78225 0,22.75 L0,40.25 C0,41.21775 0.78225,42 1.75,42 L40.25,42 C41.21775,42 42,41.21775 42,40.25 L42,15.75 C42,14.78225 41.21775,14 40.25,14 Z M12.25,36.75 L7,36.75 L7,33.25 L12.25,33.25 L12.25,36.75 Z M12.25,29.75 L7,29.75 L7,26.25 L12.25,26.25 L12.25,29.75 Z M35,36.75 L29.75,36.75 L29.75,33.25 L35,33.25 L35,36.75 Z M35,29.75 L29.75,29.75 L29.75,26.25 L35,26.25 L35,29.75 Z M35,22.75 L29.75,22.75 L29.75,19.25 L35,19.25 L35,22.75 Z">
-                                                        </path>
-                                                    </g>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                </div>
-                                <span class="nav-link-text ms-1">Elbow</span>
-                            </a>
-                            <a class="nav-link px-5 " href="../pages/result.html">
-                                <div
-                                    class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                                    <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <title>office</title>
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF"
-                                                fill-rule="nonzero">
-                                                <g transform="translate(1716.000000, 291.000000)">
-                                                    <g id="office" transform="translate(153.000000, 2.000000)">
-                                                        <path class="color-background opacity-6"
-                                                            d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z">
-                                                        </path>
-                                                        <path class="color-background"
-                                                            d="M40.25,14 L24.5,14 C23.53225,14 22.75,14.78225 22.75,15.75 L22.75,38.5 L19.25,38.5 L19.25,22.75 C19.25,21.78225 18.46775,21 17.5,21 L1.75,21 C0.78225,21 0,21.78225 0,22.75 L0,40.25 C0,41.21775 0.78225,42 1.75,42 L40.25,42 C41.21775,42 42,41.21775 42,40.25 L42,15.75 C42,14.78225 41.21775,14 40.25,14 Z M12.25,36.75 L7,36.75 L7,33.25 L12.25,33.25 L12.25,36.75 Z M12.25,29.75 L7,29.75 L7,26.25 L12.25,26.25 L12.25,29.75 Z M35,36.75 L29.75,36.75 L29.75,33.25 L35,33.25 L35,36.75 Z M35,29.75 L29.75,29.75 L29.75,26.25 L35,26.25 L35,29.75 Z M35,22.75 L29.75,22.75 L29.75,19.25 L35,19.25 L35,22.75 Z">
-                                                        </path>
-                                                    </g>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                </div>
-                                <span class="nav-link-text ms-1">Clustering</span>
-                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../pages/history_list.html">
+                        <li class="nav-item ">
+                            <a class="nav-link active" href="../pages/history_list.html">
                                 <div
                                     class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                                     <svg width="12px" height="12px" viewBox="0 0 40 44" version="1.1"
@@ -312,7 +234,7 @@
                         </li>
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">K-Means</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">K-Means Elbow Method</h6>
+                    <h6 class="font-weight-bolder mb-0">K-Means Process</h6>
                 </nav>
             </div>
         </nav>
@@ -322,21 +244,19 @@
                 <div class="col-12">
                     <div class="card mb-4">
                         <div class="card-header pb-0">
-                            <h6>Determine the optimal K with the Elbow Method</h6>
+                            <h6>History K-Means Clustering</h6>
                         </div>
                         <div class="card-body ">
-                            <form id="uploadForm" enctype="multipart/form-data">
-                                <div class="mb-3">
-                                    <label for="clustersInput" class="form-label">Max Clusters</label>
-                                    <input type="number" class="form-control" id="clustersInput" name="clustersInput">
+                            <div id="loadingIndicator" style="display: none;">
+                                <p>Loading...</p>
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
                                 </div>
-                                <button type="button" class="btn btn-primary "
-                                    onclick="setClusterConfig()">Process</button>
-                            </form>
-
-                            <div id="elbowImageContainer" style="display: none; text-align: center;">
-                                <img id="elbowImage" src="" alt="Elbow Plot">
                             </div>
+                            <!-- iteration 1..n -->
+                            <!-- show centroids -->
+                            <!-- show eculidean -->
+                            <!-- show cluster -->
                         </div>
                     </div>
                 </div>
@@ -362,34 +282,57 @@
                 window.location.href = 'sign-in.html';
             });
         });
-        function setClusterConfig() {
-            const maxClusters = document.getElementById('clustersInput').value;
-            const imgDiv = document.getElementById('elbowImageContainer');
-            const img = document.getElementById('elbowImage');
 
-            fetch('http://localhost:5000/elbow', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    max_cluster: parseInt(maxClusters)
-                })
+        // Function to generate HTML for centroids, euclideans, and clusters
+        const generateHTML = (clustering_date, file_name, index, kota, idx) => {
+            // add event this
+            // so it redirect to history detail and bring the index
+            return `<tr onclick="redirectToDetail('${index}')"><td>${idx + 1}</td><td>${file_name}</td><td>${kota}</td><td>${clustering_date}</td><td class="ms-2 mb-0 px-2 py-1  text-white rounded bg-primary" style="cursor: pointer;">DETAIL</td></tr>`;
+        };
+
+        // Function to display data in the card body
+        const displayData = (results) => {
+            const cardBody = document.querySelector('.card-body');
+            cardBody.innerHTML = '';
+            htmlTemp = ''
+            htmlTemp += '<div class="table-responsive p-0 mb-4">';
+            htmlTemp += '<table class="table align-items-center mb-0">';
+            htmlTemp += '<thead><tr><th>No</th><th>Nama File</th><th >Nama Kota</th><th>Tanggal</th></tr></thead><tbody>';
+            results.forEach(({ clustering_date, file_name, index, kota }, idx) => {
+
+                htmlTemp += generateHTML(clustering_date, file_name, index, kota, idx);
+
+
+            });
+            htmlTemp += '</tbody></table></div>';
+            htmlTemp += `<div style="border-bottom: 2px solid  #cb0c9f; margin: 10px 0 25px;"></div>`;
+
+            cardBody.innerHTML += htmlTemp
+        };
+
+        // Fetch data from the server
+        document.getElementById('loadingIndicator').style.display = 'block';
+
+        const redirectToDetail = (index) => {
+            window.location.href = `history_detail.html?index=${index}`;
+        };
+
+        fetch('http://localhost:5000/history')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                return response.json();
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to generate elbow plot: ' + response.status);
-                    }
-
-                    return response.json(); // Retrieve the image blob
-                })
-                .then(resp => {
-                    img.src = resp.path
-                    imgDiv.style.display = 'block'
-
-                })
-        }
-
+            .then(data => {
+                document.getElementById('loadingIndicator').style.display = 'none';
+                console.log(data.records)
+                displayData(data.records);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                // Handle error
+            });
     </script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
