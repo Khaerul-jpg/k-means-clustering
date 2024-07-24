@@ -295,7 +295,7 @@
         const generateHTML = (cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur, idx) => {
             // add event this
             // so it redirect to history detail and bring the index
-            return `<tr ><td>${idx + 1}</td><td>${nama}</td><td>${cluster}</td><td>${umur}</td><td>${ijazah_tertinggi}</td><td>${jenis_cacat}</td><td>${status_pekerjaan}</td><td>${jumlah_jam_kerja}</td><td>${lapangan_usaha}</td><td>${penyakit_kronis}</td></tr>`;
+            return `<tr ><td>${idx + 1}</td><td>${nama}</td><td>${cluster}</td><td>${getClusterLabel(cluster)}</td><td>${umur}</td><td>${ijazah_tertinggi}</td><td>${jenis_cacat}</td><td>${status_pekerjaan}</td><td>${jumlah_jam_kerja}</td><td>${lapangan_usaha}</td><td>${penyakit_kronis}</td></tr>`;
         };
 
         // Function to display data in the card body
@@ -311,7 +311,7 @@
 
             htmlTemp += '<div class="table-responsive p-0 mb-4">';
             htmlTemp += '<table class="table align-items-center mb-0">';
-            htmlTemp += '<thead><tr><th>No</th><th>Nama</th><th>Cluster</th><th>Umur</th><th>Ijazah Tertinggi</th><th>Jenis Cacat</th><th>Status Pekerjaan</th><th>Jumlah Jam Kerja</th><th>Lapangan Usaha</th><th>Penyakit Kronis</th></tr></thead><tbody>';
+            htmlTemp += '<thead><tr><th>No</th><th>Nama</th><th>Cluster</th><th>Label</th><th>Umur</th><th>Ijazah Tertinggi</th><th>Jenis Cacat</th><th>Status Pekerjaan</th><th>Jumlah Jam Kerja</th><th>Lapangan Usaha</th><th>Penyakit Kronis</th></tr></thead><tbody>';
             results.forEach(({ cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur }, idx) => {
 
                 htmlTemp += generateHTML(cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur, idx);
@@ -331,6 +331,24 @@
             window.location.href = `history_detail.html?index=${index}`;
         };
 
+        const getClusterLabel = (cluster) => {
+            switch (cluster) {
+                case '1':
+                    return 'Tidak Miskin'
+                    break;
+                case '2':
+                    return 'Sedang Miskin'
+                    break;
+                case '3':
+                    return 'Miskin'
+                    break;
+                case '4':
+                    return 'Sangat Miskin'
+                    break;
+                default:
+                    return 'No Label'
+            }
+        }
         fetch(`http://localhost:5000/history-detail?id=${passedIndex}`)
             .then(response => {
                 if (!response.ok) {
