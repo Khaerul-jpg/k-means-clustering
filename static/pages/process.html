@@ -413,9 +413,9 @@
             html += `<div class="text-center mt-5"><h5>Clusters</h5></div>`;
             html += '<div class="table-responsive p-0 mb-4">';
             html += '<table class="table align-items-center mb-0">';
-            html += '<thead><tr><th>Nama</th><th>Cluster</th><th>Umur</th><th>Ijazah Tertinggi</th><th>Jenis Cacat</th><th>Status Pekerjaan</th><th>Jumlah Jam Kerja</th><th>Lapangan Usaha</th><th>Penyakit Kronis</th></tr></thead><tbody>';
+            html += '<thead><tr><th>Nama</th><th>Cluster</th><th>Label</th><th>Umur</th><th>Ijazah Tertinggi</th><th>Jenis Cacat</th><th>Status Pekerjaan</th><th>Jumlah Jam Kerja</th><th>Lapangan Usaha</th><th>Penyakit Kronis</th></tr></thead><tbody>';
             clusters.forEach(([nama, cluster, umur, ijazah, jcat, statPekerjaan, jamKerja, lapUsaha, kronis]) => {
-                html += `<tr><td>${nama}</td><td>${cluster}</td><td>${umur}</td><td>${ijazah}</td><td>${jcat}</td><td>${statPekerjaan}</td><td>${jamKerja}</td><td>${lapUsaha}</td><td>${kronis}</td></tr>`;
+                html += `<tr><td>${nama}</td><td>${getClusterLabel(cluster)}</td><td>${cluster}</td><td>${umur}</td><td>${ijazah}</td><td>${jcat}</td><td>${statPekerjaan}</td><td>${jamKerja}</td><td>${lapUsaha}</td><td>${kronis}</td></tr>`;
             });
             html += '</tbody></table></div>';
 
@@ -435,6 +435,25 @@
 
             return html;
         };
+
+        const getClusterLabel = (cluster) => {
+            switch (cluster) {
+                case 1:
+                    return 'Tidak Miskin'
+                    break;
+                case 2:
+                    return 'Sedang Miskin'
+                    break;
+                case 3:
+                    return 'Miskin'
+                    break;
+                case 4:
+                    return 'Sangat Miskin'
+                    break;
+                default:
+                    return 'No Label'
+            }
+        }
 
         // Function to display data in the card body
         const displayData = (results) => {
