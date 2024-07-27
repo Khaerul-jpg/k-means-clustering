@@ -38,6 +38,54 @@ class KmeansHistory(db.Model):
     penyakit_kronis = db.Column(db.String(255), unique=True, nullable=False)
 
 
+class KmeansUpload(db.Model):
+    __tablename__ = 'kmeans_upload'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    IDARTBDT = db.Column(db.String(255), default='', nullable=False)
+    IDBDT = db.Column(db.String(255), default='', nullable=False)
+    RUTA6 = db.Column(db.String(255), default='', nullable=False)
+    NoPesertaPBDT = db.Column(db.String(255), default='', nullable=False)
+    KDPROP = db.Column(db.String(255), default='', nullable=False)
+    KDKAB = db.Column(db.String(255), default='', nullable=False)
+    KDKEC = db.Column(db.String(255), default='', nullable=False)
+    KDDESA = db.Column(db.String(255), default='', nullable=False)
+    NoPesertaPKH = db.Column(db.String(255), default='', nullable=False)
+    ada_pkh = db.Column(db.String(255), default='', nullable=False)
+    NoPesertaKKS2016 = db.Column(db.String(255), default='', nullable=False)
+    NoPesertaPBI = db.Column(db.String(255), default='', nullable=False)
+    NoArtPBI = db.Column(db.String(255), default='', nullable=False)
+    Nama = db.Column(db.String(255), default='', nullable=False)
+    JnsKel = db.Column(db.String(255), default='', nullable=False)
+    TmpLahir = db.Column(db.String(255), default='', nullable=False)
+    Hub_KRT = db.Column(db.String(255), default='', nullable=False)
+    NUK = db.Column(db.String(255), default='', nullable=False)
+    Hubkel = db.Column(db.String(255), default='', nullable=False)
+    Umur = db.Column(db.String(255), default='', nullable=False)
+    Sta_kawin = db.Column(db.String(255), default='', nullable=False)
+    Ada_akta_nikah = db.Column(db.String(255), default='', nullable=False)
+    Ada_diKK = db.Column(db.String(255), default='', nullable=False)
+    Ada_kartu_identitas = db.Column(db.String(255), default='', nullable=False)
+    Ada_kks = db.Column(db.String(255), default='', nullable=False)
+    Sta_hamil = db.Column(db.String(255), default='', nullable=False)
+    Jenis_cacat = db.Column(db.String(255), default='', nullable=False)
+    Penyakit_kronis = db.Column(db.String(255), default='', nullable=False)
+    Partisipasi_sekolah = db.Column(db.String(255), default='', nullable=False)
+    Pendidikan_tertinggi = db.Column(
+        db.String(255), default='', nullable=False)
+    Kelas_tertinggi = db.Column(db.String(255), default='', nullable=False)
+    Ijazah_tertinggi = db.Column(db.String(255), default='', nullable=False)
+    Sta_Bekerja = db.Column(db.String(255), default='', nullable=False)
+    Jumlah_jamkerja = db.Column(db.String(255), default='', nullable=False)
+    Lapangan_usaha = db.Column(db.String(255), default='', nullable=False)
+    Status_pekerjaan = db.Column(db.String(255), default='', nullable=False)
+    IDPENGURUS = db.Column(db.String(255), default='', nullable=False)
+    Alamat_Pengurus = db.Column(db.String(255), default='', nullable=False)
+    MasukKuota = db.Column(db.String(255), default='', nullable=False)
+    Status_NIK_Dukcapil = db.Column(db.String(255), default='', nullable=False)
+    BSP = db.Column(db.String(255), default='', nullable=False)
+    Pengurus_Lainnya = db.Column(db.String(255), default='', nullable=False)
+
+
 dataset = []
 dataset_labels = []
 label_desa = []
@@ -235,10 +283,58 @@ def upload_file():
     file = request.files['file']
     rd = pd.read_excel(file)
 
-    uploadedFileName = file.filename
-
     # Clean column names by stripping whitespace and replacing multiple spaces with a single space
     rd.columns = rd.columns.str.strip().str.replace(r'\s+', ' ', regex=True)
+
+    for _, row in rd.iterrows():
+        new_record = KmeansUpload(
+            IDARTBDT=row.get('IDARTBDT', ''),
+            IDBDT=row.get('IDBDT', ''),
+            RUTA6=row.get('RUTA6', ''),
+            NoPesertaPBDT=row.get('NoPesertaPBDT', ''),
+            KDPROP=row.get('KDPROP', ''),
+            KDKAB=row.get('KDKAB', ''),
+            KDKEC=row.get('KDKEC', ''),
+            KDDESA=row.get('KDDESA', ''),
+            NoPesertaPKH=row.get('NoPesertaPKH', ''),
+            ada_pkh=row.get('ada_pkh', ''),
+            NoPesertaKKS2016=row.get('NoPesertaKKS2016', ''),
+            NoPesertaPBI=row.get('NoPesertaPBI', ''),
+            NoArtPBI=row.get('NoArtPBI', ''),
+            Nama=row.get('Nama', ''),
+            JnsKel=row.get('JnsKel', ''),
+            TmpLahir=row.get('TmpLahir', ''),
+            Hub_KRT=row.get('Hub_KRT', ''),
+            NUK=row.get('NUK', ''),
+            Hubkel=row.get('Hubkel', ''),
+            Umur=row.get('Umur', ''),
+            Sta_kawin=row.get('Sta_kawin', ''),
+            Ada_akta_nikah=row.get('Ada_akta_nikah', ''),
+            Ada_diKK=row.get('Ada_diKK', ''),
+            Ada_kartu_identitas=row.get('Ada_kartu_identitas', ''),
+            Ada_kks=row.get('Ada_kks', ''),
+            Sta_hamil=row.get('Sta_hamil', ''),
+            Jenis_cacat=row.get('Jenis_cacat', ''),
+            Penyakit_kronis=row.get('Penyakit_kronis', ''),
+            Partisipasi_sekolah=row.get('Partisipasi_sekolah', ''),
+            Pendidikan_tertinggi=row.get('Pendidikan_tertinggi', ''),
+            Kelas_tertinggi=row.get('Kelas_tertinggi', ''),
+            Ijazah_tertinggi=row.get('Ijazah_tertinggi', ''),
+            Sta_Bekerja=row.get('Sta_Bekerja', ''),
+            Jumlah_jamkerja=row.get('Jumlah_jamkerja', ''),
+            Lapangan_usaha=row.get('Lapangan_usaha', ''),
+            Status_pekerjaan=row.get('Status_pekerjaan', ''),
+            IDPENGURUS=row.get('IDPENGURUS', ''),
+            Alamat_Pengurus=row.get('Alamat_Pengurus', ''),
+            MasukKuota=row.get('MasukKuota', ''),
+            Status_NIK_Dukcapil=row.get('Status_NIK_Dukcapil', ''),
+            BSP=row.get('BSP', ''),
+            Pengurus_Lainnya=row.get('Pengurus_Lainnya', '')
+        )
+        db.session.add(new_record)
+    db.session.commit()
+
+    uploadedFileName = file.filename
 
     # update this
     prev_column = rd.columns.tolist()
