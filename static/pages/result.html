@@ -422,25 +422,6 @@
             return html;
         };
 
-        const getClusterLabel = (cluster) => {
-            switch (cluster) {
-                case 1:
-                    return 'Tidak Miskin'
-                    break;
-                case 2:
-                    return 'Sedang Miskin'
-                    break;
-                case 3:
-                    return 'Miskin'
-                    break;
-                case 4:
-                    return 'Sangat Miskin'
-                    break;
-                default:
-                    return 'No Label'
-            }
-        }
-
         const groupingResultCluster = (clusters, number) => {
             let html = ''
 
@@ -523,24 +504,24 @@
                 console.error('Error fetching data:', error);
                 // Handle error
             });
-            const getClusterLabel = (cluster) => {
-                switch (cluster) {
-                    case 1:
-                        return 'Tidak Miskin'
-                        break;
-                    case 2:
-                        return 'Sedang Miskin'
-                        break;
-                    case 3:
-                        return 'Miskin'
-                        break;
-                    case 4:
-                        return 'Sangat Miskin'
-                        break;
-                    default:
-                        return 'No Label'
-                }
+        const getClusterLabel = (cluster) => {
+            switch (cluster) {
+                case 1:
+                    return 'Tidak Miskin'
+                    break;
+                case 2:
+                    return 'Sedang Miskin'
+                    break;
+                case 3:
+                    return 'Miskin'
+                    break;
+                case 4:
+                    return 'Sangat Miskin'
+                    break;
+                default:
+                    return 'No Label'
             }
+        }
 
     </script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
