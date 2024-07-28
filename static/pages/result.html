@@ -412,9 +412,9 @@
             html += `<div class="text-center mt-5"><h5>Clusters</h5></div>`;
             html += '<div class="table-responsive p-0 mb-4">';
             html += '<table class="table align-items-center mb-0">';
-            html += '<thead><tr><th>Kelurahan</th><th>Nama</th><th>Cluster</th></tr></thead><tbody>';
+            html += '<thead><tr><th>Kelurahan</th><th>Nama</th><th>Cluster</th><th>Label</th></tr></thead><tbody>';
             clusters.forEach(([desa, nama, cluster]) => {
-                html += `<tr><td>${desa}</td><td>${nama}</td><td>${cluster}</td></tr>`;
+                html += `<tr><td>${desa}</td><td>${nama}</td><td>${cluster}</td><td>${getClusterLabel(cluster)}</td></tr>`;
             });
             html += '</tbody></table></div>';
             html += `<div style="border-bottom: 2px solid  #cb0c9f; margin: 10px 0 25px;"></div>`;
@@ -523,6 +523,24 @@
                 console.error('Error fetching data:', error);
                 // Handle error
             });
+            const getClusterLabel = (cluster) => {
+                switch (cluster) {
+                    case 1:
+                        return 'Tidak Miskin'
+                        break;
+                    case 2:
+                        return 'Sedang Miskin'
+                        break;
+                    case 3:
+                        return 'Miskin'
+                        break;
+                    case 4:
+                        return 'Sangat Miskin'
+                        break;
+                    default:
+                        return 'No Label'
+                }
+            }
 
     </script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
