@@ -269,6 +269,9 @@
     <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script>
+        var clusterGroup = []
+        var recordsGlobal;
+
         function getQueryParameter(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
@@ -291,15 +294,137 @@
             });
         });
 
-        // Function to generate HTML for centroids, euclideans, and clusters
-        const generateHTML = (cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur, idx) => {
-            // add event this
-            // so it redirect to history detail and bring the index
-            return `<tr ><td>${idx + 1}</td><td>${nama}</td><td>${cluster}</td><td>${getClusterLabel(cluster)}</td><td>${umur}</td><td>${ijazah_tertinggi}</td><td>${jenis_cacat}</td><td>${status_pekerjaan}</td><td>${jumlah_jam_kerja}</td><td>${lapangan_usaha}</td><td>${penyakit_kronis}</td></tr>`;
+        const getIjazahLabel = (ijazah) => {
+            switch (ijazah) {
+                case 0:
+                    return 'SD/SDLB';
+                case 1:
+                    return 'Paket A';
+                case 2:
+                    return 'M. Ibtidaiyah';
+                case 3:
+                    return 'SMP/SMPLB';
+                case 4:
+                    return 'Paket B';
+                case 5:
+                    return 'M. Tsanawiyah';
+                case 6:
+                    return 'SMA/SMK/SMALB';
+                case 7:
+                    return 'Paket C';
+                case 8:
+                    return 'M. Aliyah';
+                case 9:
+                    return 'Perguruan tinggi';
+                default:
+                    return 'No Label';
+            }
         };
 
+        const getEmploymentStatusLabel = (status) => {
+            switch (status) {
+                case 0:
+                    return 'Berusaha sendiri';
+                case 1:
+                    return 'Berusaha dibantu buruh tidak tetap/tidak dibayar';
+                case 2:
+                    return 'Berusaha dibantu buruh tetap/ dibayar';
+                case 3:
+                    return 'Buruh/karyawan/pegawai swasta';
+                case 4:
+                    return 'PNS/TNI/Polri/BUMN/BUMD/ anggota legislatif';
+                case 5:
+                    return 'Pekerja bebas pertanian';
+                case 6:
+                    return 'Pekerja bebas non-pertanian';
+                case 7:
+                    return 'Pekerja keluarga/tidak dibayar';
+                default:
+                    return 'No Label';
+            }
+        };
+
+        const getHealthConditionLabel = (condition) => {
+            switch (condition) {
+                case 0:
+                    return 'Tidak Ada';
+                case 1:
+                    return 'Hipertensi (tekanan darah tinggi)';
+                case 2:
+                    return 'Rematik';
+                case 3:
+                    return 'Asma';
+                case 4:
+                    return 'Masalah jantung';
+                case 5:
+                    return 'Diabetes (kencing manis)';
+                case 6:
+                    return 'Tuberculosis (TBC)';
+                case 7:
+                    return 'Stroke';
+                case 8:
+                    return 'Kanker atau tumor ganas';
+                case 9:
+                    return 'Lainnya (gagal ginjal, paru-paru flek, dan sejenisnya)';
+                default:
+                    return 'No Label';
+            }
+        };
+
+        const getDisabilityLabel = (disability) => {
+            switch (disability) {
+                case 0:
+                    return 'Tidak cacat';
+                case 1:
+                    return 'Tuna daksa/ cacat tubuh';
+                case 2:
+                    return 'Tuna netra/buta';
+                case 3:
+                    return 'Tuna rungu';
+                case 4:
+                    return 'Tuna wicara';
+                case 5:
+                    return 'Tuna rungu & wicara';
+                case 6:
+                    return 'Tuna netra & cacat tubuh';
+                case 7:
+                    return 'Tuna netra, rungu, & wicara';
+                case 8:
+                    return 'Tuna rungu, wicara, & cacat tubuh';
+                case 9:
+                    return 'Tuna rungu, wicara, netra, & cacat tubuh';
+                case 10:
+                    return 'Cacat mental retardas';
+                case 11:
+                    return 'Mantan penderita gangguan jiwa';
+                case 12:
+                    return 'Cacat fisik & mental';
+                default:
+                    return 'No Label';
+            }
+        };
+        // Function to generate HTML for centroids, euclideans, and clusters
+        const generateHTML = (cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur, idx, desired) => {
+            var temp = ''
+
+            if (parseInt(cluster) === desired) {
+                temp += `<tr ><td>${nama}</td><td>${cluster}</td><td>${getClusterLabel(cluster)}</td><td>${umur}</td><td>${getIjazahLabel(parseInt(ijazah_tertinggi))}</td><td>${getDisabilityLabel(parseInt(jenis_cacat))}</td><td>${getEmploymentStatusLabel(parseInt(status_pekerjaan))}</td><td>${jumlah_jam_kerja}</td><td>${lapangan_usaha}</td><td>${getHealthConditionLabel(parseInt(penyakit_kronis))}</td></tr>`
+
+            }
+
+            return temp;
+        };
+
+        document.addEventListener('click', function (e) {
+            if (e.target && e.target.matches('.page-link')) {
+                e.preventDefault();
+                const index = parseInt(e.target.getAttribute('data-index'));
+                displayData(recordsGlobal, index);
+            }
+        });
+
         // Function to display data in the card body
-        const displayData = (results) => {
+        const displayData = (results, indexShow) => {
             const cardBody = document.querySelector('.card-body');
             cardBody.innerHTML = '';
             htmlTemp = ''
@@ -309,17 +434,104 @@
                     <p><strong>Tanggal:</strong> ${results[0]['clustering_date']}</p>
                  </div>`;
 
+
             htmlTemp += '<div class="table-responsive p-0 mb-4">';
             htmlTemp += '<table class="table align-items-center mb-0">';
-            htmlTemp += '<thead><tr><th>No</th><th>Nama</th><th>Cluster</th><th>Label</th><th>Umur</th><th>Ijazah Tertinggi</th><th>Jenis Cacat</th><th>Status Pekerjaan</th><th>Jumlah Jam Kerja</th><th>Lapangan Usaha</th><th>Penyakit Kronis</th></tr></thead><tbody>';
-            results.forEach(({ cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur }, idx) => {
+            htmlTemp += '<thead><tr><th>Nama</th><th>Cluster</th><th>Label</th><th>Umur</th><th>Ijazah Tertinggi</th><th>Jenis Cacat</th><th>Status Pekerjaan</th><th>Jumlah Jam Kerja</th><th>Lapangan Usaha</th><th>Penyakit Kronis</th></tr></thead><tbody>';
 
-                htmlTemp += generateHTML(cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur, idx);
+            // aggregasi 
+            let umurAgg = 0;
+            let ijazahAgg = {};
+            let jenisCacatAgg = {};
+            let jamKerjaAgg = 0;
+            let lapanganUsahAgg = 0;
+            let statusPekerjaanAgg = {};
+            let penyakitAgg = {};
+
+            for (let idx = 0; idx < results.length; idx++) {
+                let { cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur } = results[idx];
+
+                let clusterGroup = [
+                    generateHTML(cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur, idx, 1),
+                    generateHTML(cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur, idx, 2),
+                    generateHTML(cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur, idx, 3),
+                    generateHTML(cluster, ijazah_tertinggi, jenis_cacat, jumlah_jam_kerja, lapangan_usaha, nama, penyakit_kronis, status_pekerjaan, umur, idx, 4)
+                ];
+
+                if (parseInt(cluster) === indexShow + 1) {
+                    if (umurAgg < umur) {
+                        umurAgg = parseInt(umur);
+                    }
+
+                    if (lapanganUsahAgg < lapangan_usaha) {
+                        lapanganUsahAgg = parseInt(lapangan_usaha);
+                    }
+
+                    if (jamKerjaAgg < jumlah_jam_kerja) {
+                        jamKerjaAgg = parseInt(jumlah_jam_kerja)
+                    }
+
+                    if (ijazah_tertinggi in ijazahAgg) {
+                        ijazahAgg[ijazah_tertinggi] = ijazahAgg[ijazah_tertinggi] + 1
+                    } else {
+                        ijazahAgg[ijazah_tertinggi] = 1
+                    }
+
+                    if (jenis_cacat in jenisCacatAgg) {
+                        jenisCacatAgg[jenis_cacat] = jenisCacatAgg[jenis_cacat] + 1
+                    } else {
+                        jenisCacatAgg[jenis_cacat] = 1
+                    }
+
+                    if (status_pekerjaan in statusPekerjaanAgg) {
+                        statusPekerjaanAgg[status_pekerjaan] = statusPekerjaanAgg[status_pekerjaan] + 1
+                    } else {
+                        statusPekerjaanAgg[status_pekerjaan] = 1
+                    }
+
+                    if (penyakit_kronis in penyakitAgg) {
+                        penyakitAgg[penyakit_kronis] = penyakitAgg[penyakit_kronis] + 1
+                    } else {
+                        penyakitAgg[penyakit_kronis] = 1
+                    }
 
 
-            });
+                }
+
+                htmlTemp += clusterGroup[indexShow];
+            }
+
+            const getMax = (inputMap) => {
+                let maxKey = null;
+                let maxValue = -Infinity;
+
+                for (const key in inputMap) {
+                    if (inputMap[key] > maxValue) {
+                        maxValue = inputMap[key];
+                        maxKey = key;
+                    }
+                }
+
+                return maxKey
+            }
+
+            htmlTemp += `<tr><td></td><td>Aggregasi Nilai Tertinggi/Terbanyak</td><td></td><td>${umurAgg}</td><td>${getIjazahLabel(parseInt(getMax(ijazahAgg)))}</td><td>${getDisabilityLabel(parseInt(getMax(jenisCacatAgg)))}</td><td>${getEmploymentStatusLabel(parseInt(getMax(statusPekerjaanAgg)))}</td><td>${jamKerjaAgg}</td><td>${lapanganUsahAgg}</td><td>${getHealthConditionLabel(parseInt(getMax(penyakitAgg)))}</td></tr>`
+
+
             htmlTemp += '</tbody></table></div>';
             htmlTemp += `<div style="border-bottom: 2px solid  #cb0c9f; margin: 10px 0 25px;"></div>`;
+
+            pagingStart = '<div class="container mt-5"><nav aria-label="Page navigation"><ul class="pagination">'
+            for (let i = 0; i < 4; i++) {
+                if (indexShow === i) {
+                    pagingStart += `<li class="page-item"><a class="page-link active" href="" data-index="${i}">${i + 1}</a></li>`
+                } else {
+                    pagingStart += `<li class="page-item"><a class="page-link" href=""" data-index="${i}">${i + 1}</a></li>`
+                }
+            }
+            pagingStart += '</ul></nav></div>'
+
+            htmlTemp += pagingStart
 
             cardBody.innerHTML += htmlTemp
         };
@@ -358,7 +570,8 @@
             })
             .then(data => {
                 document.getElementById('loadingIndicator').style.display = 'none';
-                displayData(data.records);
+                recordsGlobal = data.records
+                displayData(data.records, 0);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
